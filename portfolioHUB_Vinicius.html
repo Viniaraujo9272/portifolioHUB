@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>portfolioHUB — Vinicius Araujo Vieira de Castro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #C2185B;
+    --pink-light: #F06292;
+    --pink-pale: #FCE4EC;
+    --dark: #1a1a2e;
+    --mid: #16213e;
+    --accent: #e91e8c;
+    --white: #ffffff;
+    --gray: #f5f5f5;
+    --text: #212121;
+    --muted: #757575;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ─── PRINT / PDF ─── */
+  @media print {
+    .no-print { display: none !important; }
+    body { font-size: 12px; }
+    section { page-break-inside: avoid; }
+    .hero { page-break-after: always; }
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--dark);
+    color: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e91e8c33 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .portfolio-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--pink-light);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .portfolio-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--pink-light);
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .hero-name span { color: var(--accent); }
+
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+  }
+
+  .hero-bio {
+    font-size: 15px;
+    color: #ccc;
+    max-width: 400px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .contact-chip {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: #ddd;
+  }
+  .contact-chip strong { color: var(--accent); margin-right: 4px; }
+
+  /* photo side */
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-photo-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #16213e 0%, #0d1b2a 100%);
+  }
+
+  .hero-photo-frame {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-photo-frame img {
+    width: 320px;
+    height: 420px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 12px 12px 0 0;
+    filter: grayscale(20%) contrast(1.05);
+    border: 2px solid rgba(233,30,140,0.3);
+    box-shadow: 0 0 60px rgba(233,30,140,0.15);
+  }
+
+  .hero-photo-tag {
+    position: absolute;
+    bottom: 32px;
+    right: 40px;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 8px 14px;
+    border-radius: 4px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    padding: 72px 80px;
+  }
+  .section:nth-child(even) {
+    background: var(--gray);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--dark);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #ddd, transparent);
+  }
+
+  /* ─── CURRICULUM ─── */
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .cv-block-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--dark);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .cv-item {
+    margin-bottom: 20px;
+  }
+  .cv-item-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
+  }
+  .cv-item-sub {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin: 2px 0;
+  }
+  .cv-item-desc {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ─── SKILLS GRID ─── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--white);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent);
+  }
+  .skill-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .skill-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--dark);
+    margin-bottom: 12px;
+  }
+  .skill-bar-bg {
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--pink), var(--accent));
+    border-radius: 2px;
+  }
+  .skill-level {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ─── PROJECTS ─── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--white);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+  }
+  .project-tag {
+    display: inline-block;
+    background: var(--pink-pale);
+    color: var(--pink);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .project-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .project-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .project-tech {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tech-badge {
+    background: var(--dark);
+    color: #aaa;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── LANGUAGES ─── */
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 600px;
+  }
+  .lang-card {
+    background: var(--white);
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+  }
+  .lang-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--dark);
+  }
+  .lang-level {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonial-card {
+    background: var(--dark);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 40px 48px;
+    max-width: 700px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: 16px; left: 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.6;
+  }
+  .testimonial-text {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #ccc;
+    padding-top: 24px;
+  }
+  .testimonial-author {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--white);
+  }
+  .author-role {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--dark);
+    color: #666;
+    text-align: center;
+    padding: 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  .footer span { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="portfolio-label">portfolioHUB</div>
+
+    <h1 class="hero-name">
+      Vinicius<br>
+      <span>Castro</span>
+    </h1>
+
+    <p class="hero-title">Estudante de Ciência da Computação · UNICEUB · 2026</p>
+
+    <p class="hero-bio">
+      Atleta semiprofissional de futebol, apaixonado por tecnologia e esportes. 
+      Atualmente no primeiro semestre de Ciência da Computação, desenvolvendo 
+      habilidades em programação e análise de dados, com foco em construir uma 
+      carreira sólida na área de tecnologia.
+    </p>
+
+    <div class="contact-row">
+      <div class="contact-chip"><strong>✉</strong> viniciusavcastro@gmail.com</div>
+      <div class="contact-chip"><strong>📍</strong> Brasília — DF</div>
+      <div class="contact-chip"><strong>🎓</strong> 1º Semestre</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-photo-bg"></div>
+    <div class="hero-photo-frame">
+      <img src="Captura_de_tela_2026-04-10_194706.png" 
+           alt="Foto de Vinicius Araujo Vieira de Castro"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div style="display:none; width:320px; height:420px; border-radius:12px 12px 0 0; background:rgba(233,30,140,0.1); border:2px solid rgba(233,30,140,0.3); align-items:center; justify-content:center; flex-direction:column; gap:12px;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:60px; color:rgba(233,30,140,0.4);">VC</div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:#555; letter-spacing:2px;">FOTO DO ALUNO</div>
+      </div>
+    </div>
+    <div class="hero-photo-tag">CIÊNCIA DA COMPUTAÇÃO</div>
+  </div>
+</section>
+
+<!-- ═══ CURRÍCULO ═══ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 class="section-title">Currículo</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="cv-grid">
+    <div>
+      <div class="cv-block-title">Formação Acadêmica</div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Bacharelado em Ciência da Computação</div>
+        <div class="cv-item-sub">UNICEUB — Centro Universitário de Brasília · 2026–2030</div>
+        <div class="cv-item-desc">
+          Graduação em andamento. Foco em fundamentos de programação, 
+          estruturas de dados, algoritmos e desenvolvimento de sistemas.
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Curso de Python para Iniciantes</div>
+        <div class="cv-item-sub">Udemy · 2026 — em andamento</div>
+        <div class="cv-item-desc">
+          Aprendizado de lógica de programação, estruturas de controle, 
+          funções, listas e manipulação de dados com Python.
+        </div>
+      </div>
+
+      <div class="cv-block-title" style="margin-top:32px;">Experiência Profissional</div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Atleta Semiprofissional de Futebol</div>
+        <div class="cv-item-sub">Atividade Esportiva · contínuo</div>
+        <div class="cv-item-desc">
+          Dedicação ao futebol em nível semiprofissional, desenvolvendo 
+          disciplina, trabalho em equipe, resiliência e gestão de 
+          performance — competências altamente valorizadas no mercado.
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Experiência Profissional Formal</div>
+        <div class="cv-item-sub">A ser construída durante a graduação</div>
+        <div class="cv-item-desc">
+          Aberto a oportunidades de estágio e projetos voluntários 
+          na área de tecnologia a partir do 2º semestre.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="cv-block-title">Habilidades Técnicas</div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Microsoft Excel</div>
+        <div class="cv-item-sub">Ferramentas de Escritório · Avançado</div>
+        <div class="cv-item-desc">Manipulação de planilhas, fórmulas, tabelas dinâmicas e análise de dados.</div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Python</div>
+        <div class="cv-item-sub">Linguagem de Programação · Iniciante</div>
+        <div class="cv-item-desc">Lógica de programação, algoritmos básicos e scripts de automação simples.</div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-title">Pseudocódigo & Algoritmos</div>
+        <div class="cv-item-sub">Fundamentos · Em desenvolvimento</div>
+        <div class="cv-item-desc">Representação de lógica computacional e resolução de problemas algorítmicos.</div>
+      </div>
+
+      <div class="cv-block-title" style="margin-top:32px;">Competências Pessoais</div>
+
+      <div class="cv-item">
+        <div class="cv-item-desc">
+          Trabalho em equipe · Disciplina · Resiliência · Proatividade · 
+          Comunicação · Adaptabilidade · Foco em resultados · 
+          Ética esportiva e profissional.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HABILIDADES ═══ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2 class="section-title">Habilidades &amp; Competências</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-title">Tecnologia</div>
+      <div class="skill-card-name">Python</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:25%"></div></div>
+      <div class="skill-level">Iniciante · Em progresso via Udemy</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-title">Produtividade</div>
+      <div class="skill-card-name">Excel</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:75%"></div></div>
+      <div class="skill-level">Avançado · Domínio em análises e fórmulas</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-title">Fundamentos</div>
+      <div class="skill-card-name">Algoritmos</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:35%"></div></div>
+      <div class="skill-level">Básico · Pseudocódigo e lógica</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-title">Soft Skill</div>
+      <div class="skill-card-name">Liderança</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div>
+      <div class="skill-level">Desenvolvida no esporte semiprofissional</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-title">Soft Skill</div>
+      <div class="skill-card-name">Disciplina</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div>
+      <div class="skill-level">Alta — rotina de atleta + estudante</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-title">Idioma</div>
+      <div class="skill-card-name">Inglês</div>
+      <div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div>
+      <div class="skill-level">Quase fluente — leitura e conversação</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJETOS ═══ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2 class="section-title">Projetos Acadêmicos</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <span class="project-tag">ACADÊMICO · 2026</span>
+      <div class="project-title">Algoritmos em Pseudocódigo</div>
+      <p class="project-desc">
+        Desenvolvimento de exercícios de lógica computacional utilizando 
+        pseudocódigo como parte da grade curricular do 1º semestre de 
+        Ciência da Computação na UNICEUB. Foco em estruturas de decisão, 
+        repetição e decomposição de problemas.
+      </p>
+      <div class="project-tech">
+        <span class="tech-badge">PSEUDOCÓDIGO</span>
+        <span class="tech-badge">ALGORITMOS</span>
+        <span class="tech-badge">LÓGICA</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">FORMAÇÃO LIVRE · 2026</span>
+      <div class="project-title">Introdução ao Python — Udemy</div>
+      <p class="project-desc">
+        Curso de programação em Python em andamento na plataforma Udemy. 
+        Cobre variáveis, tipos de dados, estruturas de controle, funções 
+        e introdução à manipulação de listas e dicionários. Aplicação 
+        prática com mini projetos ao longo das aulas.
+      </p>
+      <div class="project-tech">
+        <span class="tech-badge">PYTHON</span>
+        <span class="tech-badge">UDEMY</span>
+        <span class="tech-badge">EM ANDAMENTO</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">PESSOAL · CONTÍNUO</span>
+      <div class="project-title">portfolioHUB — Este Portfólio</div>
+      <p class="project-desc">
+        Desenvolvimento do portfólio digital pessoal como entrega do 
+        desafio inicial da disciplina, utilizando HTML, CSS e boas 
+        práticas de estruturação de conteúdo. Primeira experiência 
+        prática com desenvolvimento web.
+      </p>
+      <div class="project-tech">
+        <span class="tech-badge">HTML</span>
+        <span class="tech-badge">CSS</span>
+        <span class="tech-badge">GIT/GITHUB</span>
+      </div>
+    </div>
+
+    <div class="project-card" style="border:1px dashed #ddd; background:transparent;">
+      <span class="project-tag">EM BREVE</span>
+      <div class="project-title">Próximos Projetos</div>
+      <p class="project-desc">
+        À medida que avanço na graduação e nos cursos livres, novos 
+        projetos serão adicionados aqui — incluindo automações em Python, 
+        análise de dados esportivos e aplicações web completas.
+      </p>
+      <div class="project-tech">
+        <span class="tech-badge" style="background:#eee; color:#aaa;">A DEFINIR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IDIOMAS ═══ -->
+<section class="section" style="background:var(--gray);">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2 class="section-title">Idiomas</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="lang-grid">
+    <div class="lang-card">
+      <div class="lang-name">Português</div>
+      <div class="lang-level">Nativo</div>
+    </div>
+    <div class="lang-card">
+      <div class="lang-name">Inglês</div>
+      <div class="lang-level">Quase Fluente</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RECOMENDAÇÃO ═══ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2 class="section-title">Recomendações</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="testimonial-card">
+    <p class="testimonial-text">
+      O Vinicius é um jovem de caráter sólido, altamente disciplinado e 
+      comprometido com tudo o que faz. Sua trajetória como atleta 
+      semiprofissional demonstra não apenas talento, mas também 
+      dedicação, resiliência e capacidade de trabalhar em equipe sob 
+      pressão. Tenho plena confiança de que ele traz essas mesmas 
+      qualidades para o ambiente acadêmico e profissional. 
+      É um prazer recomendar o Vinicius para qualquer oportunidade 
+      que exija comprometimento e vontade de crescer.
+    </p>
+    <div class="testimonial-author">
+      <div class="author-avatar">GC</div>
+      <div>
+        <div class="author-name">Glauco Castro</div>
+        <div class="author-role">Família · Recomendação Pessoal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <p>PORTFOLIOHUB · <span>VINICIUS ARAUJO VIEIRA DE CASTRO</span> · CIÊNCIA DA COMPUTAÇÃO · UNICEUB · 2026</p>
+</footer>
+
+</body>
+</html>
